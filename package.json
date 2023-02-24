@@ -1,0 +1,25 @@
+{
+  "name": "js-pachong",
+  "version": "1.0.0",
+  "description": "简单实现js爬虫的小项目",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhengwenming/js-pachong.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zhengwenming/js-pachong/issues"
+  },
+  "homepage": "https://github.com/zhengwenming/js-pachong#readme",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.12",
+    "request": "^2.88.2",
+    "xlsx": "^0.18.5"
+  }
+}
