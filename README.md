@@ -7,7 +7,7 @@
 git clone 仓库成功后按照如下操作：
 
 # 步骤O  
-cd js-pachong                  //进到 js-pachong 目录
+cd js-pachong                 
 
 # 步骤一
 npm install
