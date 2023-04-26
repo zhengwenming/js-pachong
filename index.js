@@ -1,13 +1,13 @@
 const request = require('request')
-const cheerio = require('cheerio')
+const cheerio = require('cheerio')//jq--xpath
 const fs = require('fs')
 var XLSX = require("xlsx");
+const { log } = require('console');
 let tableData = [];
 let headerArray = [];
-
 let count  = 10;//希望爬取数据的总页数，修改这个值，然后执行node index命令就得到output.json
-let page =  1;//从第几页开始爬
 
+let page =  1;//从第几页开始爬
 
 init(page,count);
  function init(index,c){
@@ -15,12 +15,35 @@ init(page,count);
         getDataByPage();
 }
 
+
 function convertoExcel(data){
       const worksheet = XLSX.utils.aoa_to_sheet(data);
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
-      XLSX.writeFile(workbook, `demo1.xlsx`)
+      XLSX.writeFile(workbook, `data.xlsx`)
 }
+
+// function fetchPageData(pageNumber){
+//     console.log('页==',pageNumber);
+
+//     request(`http://www.hebzfcgwssc.com/Mall/HeBei/gyssearch.aspx?page=${pageNumber}&gysname=`, (err, res) => {
+//         // console.log('页==',pageNumber,res);
+//     })
+// }
+
+// async function fetchAllPageData(totalPage) {
+//     const pageNumbers = Array.from({ length: totalPage }, (_, i) => i + 1);
+//     const promises = pageNumbers.map(fetchPageData);
+//     await Promise.all(promises);
+//   }
+
+//   fetchAllPageData(2);
+
+// const fetchAllPageData = async () => {
+//     const pageNumbers = Array.from({ length: 100 }, (_, i) => i + 1);
+//     await Promise.all(pageNumbers.map(fetchPageData));
+// };
+
 
  function getDataByPage () {
    request(`http://www.hebzfcgwssc.com/Mall/HeBei/gyssearch.aspx?page=${page}&gysname=`, (err, res) => {
@@ -29,6 +52,8 @@ function convertoExcel(data){
         }else {
             let $ = cheerio.load(res.body);
             $('tr').each(function (i,element) {
+                                    console.log('element'+i);
+
                 if(i){//body
                     let company = {"companyName":"","companyBoss":"","companyPhone":"","companyAddress":""};
                     let companyName = $(this).find('.gys-img-tt').text().trim();
