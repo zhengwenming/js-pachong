@@ -6,7 +6,8 @@
 npm install
 
 # 步骤二
-npm run start
+npm run index   
+递归调用，效率低，好理解
 
-备注：通过修改index.js里面的count-------let count  = 10;
-//希望爬取数据的总页数，修改这个值，然后执行node index命令就可以导出数据
+npm run start
+开启多线程多进程请求处理数据，效率高

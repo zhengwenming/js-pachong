@@ -1,8 +1,8 @@
 const request = require('request')
 const cheerio = require('cheerio')//jq--xpath
-const fs = require('fs')
+const fs = require('fs')//文件操作模块，写文件
 var XLSX = require("xlsx");
-const { log } = require('console');
+
 let tableData = [];
 let headerArray = [];
 let count  = 10;//希望爬取数据的总页数，修改这个值，然后执行node index命令就得到output.json
@@ -11,10 +11,9 @@ let page =  1;//从第几页开始爬
 
 init(page,count);
  function init(index,c){
-        console.log('页',index);
+        console.log(`开始请求第${index}页数据`);
         getDataByPage();
 }
-
 
 function convertoExcel(data){
       const worksheet = XLSX.utils.aoa_to_sheet(data);
@@ -23,28 +22,6 @@ function convertoExcel(data){
       XLSX.writeFile(workbook, `data.xlsx`)
 }
 
-// function fetchPageData(pageNumber){
-//     console.log('页==',pageNumber);
-
-//     request(`http://www.hebzfcgwssc.com/Mall/HeBei/gyssearch.aspx?page=${pageNumber}&gysname=`, (err, res) => {
-//         // console.log('页==',pageNumber,res);
-//     })
-// }
-
-// async function fetchAllPageData(totalPage) {
-//     const pageNumbers = Array.from({ length: totalPage }, (_, i) => i + 1);
-//     const promises = pageNumbers.map(fetchPageData);
-//     await Promise.all(promises);
-//   }
-
-//   fetchAllPageData(2);
-
-// const fetchAllPageData = async () => {
-//     const pageNumbers = Array.from({ length: 100 }, (_, i) => i + 1);
-//     await Promise.all(pageNumbers.map(fetchPageData));
-// };
-
-
  function getDataByPage () {
    request(`http://www.hebzfcgwssc.com/Mall/HeBei/gyssearch.aspx?page=${page}&gysname=`, (err, res) => {
         if (err) {
@@ -52,8 +29,6 @@ function convertoExcel(data){
         }else {
             let $ = cheerio.load(res.body);
             $('tr').each(function (i,element) {
-                                    console.log('element'+i);
-
                 if(i){//body
                     let company = {"companyName":"","companyBoss":"","companyPhone":"","companyAddress":""};
                     let companyName = $(this).find('.gys-img-tt').text().trim();
@@ -78,7 +53,8 @@ function convertoExcel(data){
             });
          }
         if(page>=count){
-            console.log('请求完毕');
+            console.log('请求完毕!');
+            console.log('开始导出汇总数据到excel!');
             let workbookArray = [];
             workbookArray.push(headerArray);//先放表头row
             tableData.forEach(company => {
@@ -86,6 +62,7 @@ function convertoExcel(data){
             });
             //方式一:数据导出到Excel(建议)
             convertoExcel(workbookArray);//转为excel，导入到本地
+            console.log('数据导出到data.xlsx中，请查看!');
 
             //方式二:数据写json文件到本地(不建议)
             // fs.writeFile("output1.json", JSON.stringify({'data':tableData}), 'utf8', function (err) { 
