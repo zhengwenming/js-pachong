@@ -8,16 +8,16 @@ cluster.setupMaster({
 });
 
 console.log(`一共开启${cpuNums}个子进程来进行爬取`);
-console.log('爬取数据是乱序的，因此给爬取的数据增加movieIndex字段\n');
+console.log('爬取数据是乱序的，因此给爬取的数据增加index字段\n');
 
 let pageNum = 10;//希望爬取数据的总页数，修改这个值，然后执行npm run start命令就得到output.json
 const startTime = Date.now();
 const dataList = [];
 let headerArray = ['供应商名称','联系人','联系电话','所在地区'];//表头(列)
 for (let i = 0; i < cpuNums; ++i) {
-    let work = cluster.fork();
+    let work = cluster.fork();//fork方法创建工作进程，创建的子进程独立运行，并可以通过IPC通道与主进程通信
 
-    // 抓取豆瓣前 10 页日本动画数据
+    //每个work子进程开启工作，开始抓取网络数据
     work.send([i , cpuNums, pageNum]);
 
     work.on('message' , (message) => {
