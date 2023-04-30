@@ -2,6 +2,13 @@
 简单实现js爬虫的小项目
 
 前提node环境，安装node。本人node版本v14.0.0
+
+
+git clone 仓库成功后按照如下操作：
+
+# 步骤O  
+cd js-pachong                 
+
 # 步骤一
 npm install
 
